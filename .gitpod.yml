@@ -1,0 +1,26 @@
+image: gitpod/workspace-full
+
+tasks:
+  - init: |
+      # Mise à jour des paquets et installation des dépendances PHP
+      sudo apt-get update
+      sudo apt-get install -y php-cli php-mbstring php-xml php-intl php-sqlite3 unzip curl
+
+      # Installer Composer
+      curl -sS https://getcomposer.org/installer | php
+      sudo mv composer.phar /usr/local/bin/composer
+
+      # Installer Symfony CLI dans $HOME
+      curl -sS https://get.symfony.com/cli/installer | bash
+      echo 'export PATH="$HOME/.symfony/bin:$PATH"' >> ~/.bashrc
+      export PATH="$HOME/.symfony/bin:$PATH"
+
+      # Créer le projet Symfony dans un sous-dossier
+      symfony new my_project --webapp
+  - command: |
+      cd my_project
+      symfony serve --no-tls --port=8000
+
+ports:
+  - port: 8000
+    onOpen: open-preview
